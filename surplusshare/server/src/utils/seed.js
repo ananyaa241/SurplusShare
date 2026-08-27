@@ -6,10 +6,14 @@ import Reservation from '../models/Reservation.js';
 
 const SEED_DB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/surplusshare';
 
-const seedDB = async () => {
+export const seedDB = async (isStandalone = true) => {
     try {
-        await mongoose.connect(SEED_DB_URI);
-        console.log('Connected to DB, clearing existing data...');
+        if (isStandalone) {
+            await mongoose.connect(SEED_DB_URI);
+            console.log('Connected to DB...');
+        }
+
+        console.log('Clearing existing data...');
         await User.deleteMany({});
         await FoodListing.deleteMany({});
         await Reservation.deleteMany({});
@@ -189,11 +193,19 @@ const seedDB = async () => {
         console.log('Seeding Complete! Demo accounts ready.');
         console.log('Supplier: demo.supplier@surplusshare.com / password123');
         console.log('Receiver: demo.receiver@surplusshare.com / password123');
-        process.exit(0);
+        console.log('Supplier: demo.supplier@surplusshare.com / password123');
+        console.log('Receiver: demo.receiver@surplusshare.com / password123');
+
+        if (isStandalone) process.exit(0);
     } catch (err) {
         console.error('Seed error:', err);
-        process.exit(1);
+        if (isStandalone) process.exit(1);
+        throw err;
     }
 };
 
-seedDB();
+// Only run standalone if executed directly via node
+const isMain = process.argv[1] && process.argv[1].endsWith('seed.js');
+if (isMain) {
+    seedDB(true);
+}
