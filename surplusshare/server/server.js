@@ -19,7 +19,7 @@ app.use('/api/listings', listingRoutes);
 app.use('/api/reservations', reservationRoutes);
 
 const PORT = process.env.PORT || 5000;
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/surplusshare';
+const MONGODB_URI = process.env.MONGO_URI || process.env.MONGODB_URI || 'mongodb://localhost:27017/surplusshare';
 
 mongoose.connect(MONGODB_URI)
     .then(async () => {
@@ -29,12 +29,10 @@ mongoose.connect(MONGODB_URI)
             const User = (await import('./src/models/User.js')).default;
             const count = await User.countDocuments();
             if (count === 0) {
-                console.log('⚠️ Database is completely empty! Auto-seeding demonstration data exclusively for viewers...');
-                await seedDB(false);
-                console.log('✅ Auto-seed complete!');
+                console.log('⚠️ Database is completely empty! Please run "npm run seed" or "npm run seed:reset" to populate demo data.');
             }
         } catch (e) {
-            console.error('Auto-seed initialization failed:', e);
+            console.error('Initialization check failed:', e);
         }
 
         app.listen(PORT, () => {
