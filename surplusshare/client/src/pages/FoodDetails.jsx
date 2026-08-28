@@ -40,7 +40,7 @@ const FoodDetails = () => {
                 listingId: id,
                 quantity: reserveAmount
             });
-            navigate('/my-reservations', { state: { newReservation: data.pickupCode } });
+            navigate(`/track-order/${data.pickupCode}`);
         } catch (err) {
             alert(err.response?.data?.message || 'Reservation failed');
             setReserving(false);

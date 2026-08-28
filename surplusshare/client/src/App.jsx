@@ -9,6 +9,7 @@ import MyListings from './pages/MyListings';
 import FindFood from './pages/FindFood';
 import FoodDetails from './pages/FoodDetails';
 import MyReservations from './pages/MyReservations';
+import OrderTracker from './pages/OrderTracker';
 import Profile from './pages/Profile';
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
           <Route path="/find-food" element={<FindFood />} />
           <Route path="/listing/:id" element={<FoodDetails />} />
           <Route path="/my-reservations" element={<MyReservations />} />
+          <Route path="/track-order/:code" element={<OrderTracker />} />
           <Route path="/profile" element={<Profile />} />
         </Routes>
       </AppLayout>
