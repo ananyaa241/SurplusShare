@@ -1,14 +1,17 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
+import dotenv from 'dotenv';
 import User from '../models/User.js';
 import FoodListing from '../models/FoodListing.js';
 import Reservation from '../models/Reservation.js';
 
-const SEED_DB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/surplusshare';
+// Load environment variables immediately when this module is invoked standalone
+dotenv.config();
 
 export const seedDB = async (isStandalone = true) => {
     try {
         if (isStandalone) {
+            const SEED_DB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/surplusshare';
             await mongoose.connect(SEED_DB_URI);
             console.log('Connected to DB...');
         }
