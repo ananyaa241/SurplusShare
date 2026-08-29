@@ -52,7 +52,16 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider value={{ user, loading, login, register, logout }}>
-            {!loading && children}
+            {loading ? (
+                <div className="min-h-screen flex items-center justify-center bg-gray-50">
+                    <div className="flex flex-col items-center">
+                        <div className="w-12 h-12 border-4 border-brand-200 border-t-brand-600 rounded-full animate-spin mb-4"></div>
+                        <h2 className="text-xl font-bold text-gray-700">Loading SurplusShare...</h2>
+                    </div>
+                </div>
+            ) : (
+                children
+            )}
         </AuthContext.Provider>
     );
 };

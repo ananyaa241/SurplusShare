@@ -50,7 +50,7 @@ const FindFood = () => {
     const bengaluruCenter = [12.9716, 77.5946];
 
     return (
-        <div className="h-[calc(100vh-64px)] overflow-hidden flex flex-col md:flex-row -mx-4 md:-mx-8">
+        <div className="h-[calc(100vh-64px)] overflow-hidden flex flex-col md:flex-row">
             {/* Left Panel: List */}
             <div className="w-full md:w-1/2 lg:w-5/12 h-full flex flex-col bg-gray-50 border-r border-gray-200 shadow-sm z-10 relative">
                 <div className="p-6 bg-white border-b border-gray-100 z-10 shrink-0">

@@ -33,7 +33,7 @@ const Dashboard = () => {
 
     return (
         <div className="max-w-6xl mx-auto">
-            <h1 className="text-3xl font-black text-gray-900 mb-2">Welcome back, {user?.name.split(' ')[0]}! 👋</h1>
+            <h1 className="text-3xl font-black text-gray-900 mb-2">Welcome back, {user?.name?.split(' ')[0] || 'Guest'}! 👋</h1>
             <p className="text-gray-500 mb-8 font-medium">Here's your impact on the community.</p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
