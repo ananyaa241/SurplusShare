@@ -2,10 +2,18 @@ import FoodListing from '../models/FoodListing.js';
 
 export const createListing = async (req, res) => {
     try {
+        // Simple mock geocoding logic based on center of Bengaluru
+        // since this is a demo app. Adds a little jitter for spread.
+        const centerLat = 12.9716;
+        const centerLng = 77.5946;
+        const jitterLat = (Math.random() - 0.5) * 0.1;
+        const jitterLng = (Math.random() - 0.5) * 0.1;
+
         const listing = new FoodListing({
             ...req.body,
             supplier: req.user.id,
             availableQuantity: req.body.quantity, // initially available equals requested
+            coordinates: req.body.coordinates || { lat: centerLat + jitterLat, lng: centerLng + jitterLng },
             status: 'AVAILABLE'
         });
         await listing.save();
@@ -17,8 +25,15 @@ export const createListing = async (req, res) => {
 
 export const getAllListings = async (req, res) => {
     try {
+        const now = new Date();
+        // First, auto-expire any listings that are in the past
+        await FoodListing.updateMany(
+            { status: 'AVAILABLE', expiryTime: { $lt: now } },
+            { $set: { status: 'EXPIRED' } }
+        );
+
         // Basic filter for non-expired, available listings. 
-        const listings = await FoodListing.find({ status: 'AVAILABLE', expiryTime: { $gt: new Date() } })
+        const listings = await FoodListing.find({ status: 'AVAILABLE', expiryTime: { $gt: now } })
             .populate('supplier', 'name role')
             .sort({ createdAt: -1 });
         res.json(listings);

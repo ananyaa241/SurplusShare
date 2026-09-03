@@ -102,6 +102,13 @@ const MyReservations = () => {
                                     {res.foodListing?.supplier?.name || 'Local Supplier'}
                                 </div>
 
+                                {res.status === 'CANCELLED' && (
+                                    <div className="mb-4 inline-flex items-center px-3 py-1 rounded bg-red-50 border border-red-100 text-red-600 text-xs font-bold w-fit">
+                                        <ShieldAlert className="w-4 h-4 mr-1.5" />
+                                        Missed Pickup Window (Auto-Cancelled)
+                                    </div>
+                                )}
+
                                 <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-gray-600 bg-gray-50 p-2.5 rounded-lg border border-gray-100">
                                     <span className="flex items-center">
                                         <Package className="w-4 h-4 mr-1.5 text-brand-500" /> {res.quantity} {res.foodListing?.unit || 'items'}
@@ -115,10 +122,21 @@ const MyReservations = () => {
                             </div>
 
                             <div className="w-full sm:w-auto shrink-0 flex flex-col items-center sm:items-end justify-center bg-gray-50 sm:bg-transparent p-4 sm:p-0 rounded-xl">
-                                <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Pickup Code</span>
-                                <span className={`text-3xl font-black ${res.status === 'RESERVED' ? 'text-gray-900 tracking-wider' : 'text-gray-400 line-through'}`}>
-                                    {res.pickupCode}
-                                </span>
+                                {res.status === 'CANCELLED' ? (
+                                    <>
+                                        <span className="text-xs font-bold text-red-400 uppercase tracking-widest mb-1">Missed</span>
+                                        <span className="text-2xl font-black text-gray-300 line-through decoration-red-300 decoration-2">
+                                            {res.pickupCode}
+                                        </span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Pickup Code</span>
+                                        <span className={`text-3xl font-black ${res.status === 'RESERVED' ? 'text-gray-900 tracking-wider' : 'text-gray-400 line-through'}`}>
+                                            {res.pickupCode}
+                                        </span>
+                                    </>
+                                )}
                             </div>
                         </div>
                     ))}

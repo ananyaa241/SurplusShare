@@ -39,12 +39,27 @@ export const createReservation = async (req, res) => {
 
 export const getMyReservations = async (req, res) => {
     try {
-        const reservations = await Reservation.find({ receiver: req.user.id })
+        let reservations = await Reservation.find({ receiver: req.user.id })
             .populate({
                 path: 'foodListing',
                 populate: { path: 'supplier', select: 'name email' }
             })
             .sort({ createdAt: -1 });
+
+        const now = new Date();
+        let changed = false;
+
+        // Auto-cancel reservations if they missed the pickup window
+        for (let r of reservations) {
+            if (r.status === 'RESERVED' && r.foodListing && r.foodListing.pickupEnd) {
+                if (new Date(r.foodListing.pickupEnd) < now) {
+                    r.status = 'CANCELLED';
+                    await r.save();
+                    changed = true;
+                }
+            }
+        }
+
         res.json(reservations);
     } catch (err) {
         res.status(500).json({ message: 'Error fetching reservations', error: err.message });
